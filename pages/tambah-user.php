@@ -39,7 +39,7 @@ if (isset($_POST['simpan'])) {
   );
 
   if ($query) {
-    header("location:user.php?tambah=berhasil");
+    header("location:?page=user&=berhasil");
   }
 }
 

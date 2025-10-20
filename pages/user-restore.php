@@ -16,7 +16,7 @@ if (isset($_GET['delete'])) {
   $id = $_GET['delete'];
   $delete = mysqli_query($koneksi, "DELETE FROM users WHERE id='$id'");
   // redirect
-  header("location:user-restore .php?hapus=berhasil");
+  header("location:?page=user-restore&hapus=berhasil");
 }
 
 if (isset($_GET['restore'])) {
@@ -37,10 +37,10 @@ if (isset($_GET['restore'])) {
 <body>
   <h1>Restore Data User</h1>
   <div align="right">
-    <a href="user.php">Back</a>
+    <a href="?page=user&hapus=berhasil" class="btn btn-secondary">Back</a>
   </div>
   <br>
-  <table class="table" border="1" width="100%">
+  <table class="table table-striped table-bordered">
     <thead>
       <tr>
         <th>No</th>
@@ -58,9 +58,9 @@ if (isset($_GET['restore'])) {
           <td><?php echo $value['email'] ?></td>
           <td><?php echo $value['role_name'] ?></td>
           <td>
-            <a href="user-restore.php?restore=<?php echo $value['id'] ?>" onclick="return confirm('Apakah anda yakin mau me-restore?')">Restore Data</a>
-            <a onclick="return confirm('Apakah anda yakin akan menghapus data ini?')"
-              href="user-restore.php?delete=<?php echo $value['id'] ?>">
+            <a class="btn btn-primary" href="user-restore.php?restore=<?php echo $value['id'] ?>" onclick="return confirm('Apakah anda yakin mau me-restore?')">Restore Data</a>
+            <a class="btn btn-danger" onclick="return confirm('Apakah anda yakin akan menghapus data ini?')"
+              href="?page=user-restore&delete=<?php echo $value['id'] ?>">
               Delete
             </a>
           </td>

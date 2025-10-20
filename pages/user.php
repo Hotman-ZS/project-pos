@@ -16,7 +16,7 @@ if (isset($_GET['delete'])) {
   $id = $_GET['delete'];
   $delete = mysqli_query($koneksi, "UPDATE users SET deleted_at='now()' WHERE id = $id");
   // redirect
-  header("location:user.php?hapus=berhasil");
+  header("location:?page=user&hapus=berhasil");
 }
 ?>
 
@@ -28,6 +28,9 @@ if (isset($_GET['delete'])) {
         <div class="mb-3" align="right">
           <a href="?page=tambah-user" class="btn btn-primary">
             <i class="bi bi-plus-circle"></i> Add User
+          </a>
+          <a href="?page=user-restore" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Restore user
           </a>
         </div>
         <table class="table table-bordered table-striped">
@@ -48,9 +51,9 @@ if (isset($_GET['delete'])) {
                 <td><?php echo $value['email'] ?></td>
                 <td><?php echo $value['role_name'] ?></td>
                 <td>
-                  <a class="btn btn-success btn-sm" href="tambah-user.php?edit=<?php echo $value['id'] ?>"><i class="bi bi-pencil"></i></a>
+                  <a class="btn btn-success btn-sm" href="?page=tambah-user&edit=<?php echo $value['id'] ?>"><i class="bi bi-pencil"></i></a>
                   <a class="btn btn-danger btn-sm" onclick="return confirm('Apakah anda yakin akan menghapus data ini?')"
-                    href="user.php?delete=<?php echo $value['id'] ?>">
+                    href="?page=user&delete=<?php echo $value['id'] ?>">
                     <i class="bi bi-trash"></i>
                   </a>
                 </td>
@@ -63,10 +66,3 @@ if (isset($_GET['delete'])) {
     </div>
   </div>
 </div>
-
-<h1>Data User</h1>
-<div align="right">
-  <a href="tambah-user.php">Tambah</a>
-  <a href="user-restore.php">Restore</a>
-</div>
-<br>

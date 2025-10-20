@@ -1,9 +1,10 @@
 <?php
 session_start();
-include 'inc/functions.php';
+ob_start();
+// include 'inc/functions.php';
 include 'config/koneksi.php';
 
-checkLogin();
+// checkLogin();
 ?>
 
 <!DOCTYPE html>

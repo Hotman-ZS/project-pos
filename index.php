@@ -3,28 +3,36 @@ session_start();
 require_once 'config/koneksi.php';
 
 // jika tombol login di klik
-if(isset($_POST['login'])){
-    $email    = trim($_POST['email']); //trim: handle spasi / menghapus spasi
-    $password = trim($_POST['password']);
+if (isset($_POST['login'])) {
+  $email    = trim($_POST['email']); //trim: handle spasi / menghapus spasi
+  $password = trim($_POST['password']);
 
-    $query    = mysqli_query($koneksi, "SELECT * FROM users WHERE email='$email'");
-    
-    // num_rows : function untuk mengecek di dalam table data query ada apa engga 
-    // jika ada/berhasil akan menghasilkan nilai 1 sebaliknya akan 0
+  $query    = mysqli_query($koneksi, "SELECT * FROM users WHERE email='$email' ");
 
-    if(mysqli_num_rows($query) > 0){
-      // mengambil data hasil query di dalam table
-      $user = mysqli_fetch_assoc($query);
-      // jika pasword yang di input sama dengan yang ada ditable
-      // --- : a == a, a = 1 a(var)===a(var)
-      if($password === $user['password']) {
-          $_SESSION['ID'] = $user['id'];
-          $_SESSION['NAME'] = $user['name'];
-          header("location:home.php");
-      }
-    } else {
-        echo "<script>alert('Email tidak ditemukan!!')</script>";
+  // num_rows : function untuk mengecek di dalam table data query ada apa engga 
+  // jika ada/berhasil akan menghasilkan nilai 1 sebaliknya akan 0
+
+
+  if (mysqli_num_rows($query) > 0) {
+    // mengambil data hasil query di dalam table
+    $user = mysqli_fetch_assoc($query);
+
+    echo "<pre>";
+    var_dump(json_encode($user));
+    echo "</pre>";
+    // jika pasword yang di input sama dengan yang ada ditable
+    // --- : a == a, a = 1 a(var)===a(var)
+    // echo $user['password'];
+    if ($password == $user['password']) {
+      // echo $password;
+      // echo "aaaaaaaaaaaaaaaaaaaaa";
+      $_SESSION['ID'] = $user['id'];
+      $_SESSION['NAME'] = $user['name'];
+      header("location:home.php");
     }
+  } else {
+    echo "<script>alert('Email tidak ditemukan!!')</script>";
+  }
 }
 ?>
 <!DOCTYPE html>
