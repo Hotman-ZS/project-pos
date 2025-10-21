@@ -6,6 +6,7 @@ require_once 'config/koneksi.php';
 if (isset($_POST['login'])) {
   $email    = trim($_POST['email']); //trim: handle spasi / menghapus spasi
   $password = trim($_POST['password']);
+  $sha1      = sha1($password);
 
   $query    = mysqli_query($koneksi, "SELECT * FROM users WHERE email='$email' ");
 
@@ -23,7 +24,7 @@ if (isset($_POST['login'])) {
     // jika pasword yang di input sama dengan yang ada ditable
     // --- : a == a, a = 1 a(var)===a(var)
     // echo $user['password'];
-    if ($password == $user['password']) {
+    if ($sha1 == $user['password']) {
       // echo $password;
       // echo "aaaaaaaaaaaaaaaaaaaaa";
       $_SESSION['ID'] = $user['id'];

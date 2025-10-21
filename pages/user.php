@@ -30,7 +30,7 @@ if (isset($_GET['delete'])) {
             <i class="bi bi-plus-circle"></i> Add User
           </a>
           <a href="?page=user-restore" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Restore user
+            <i class="bi bi-arrow-counterclockwise"></i> Restore user
           </a>
         </div>
         <table class="table table-bordered table-striped">
