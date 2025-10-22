@@ -25,11 +25,11 @@ if (isset($_GET['delete'])) {
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
-          <h1 class="card-title">Manage Categories</h1>
+          <h1 class="card-title">Data Categories</h1>
         </div>
         <div class="card-body">
           <div class="d-flex justify-content-end m-3">
-            <a href="?page=tambah-category" class="btn btn-primary">Tambah</a>
+            <a href="?page=tambah-category" class="btn btn-primary">Add Categories</a>
           </div>
           <table class="table table-bordered table-striped">
             <tr>
