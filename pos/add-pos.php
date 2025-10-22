@@ -162,8 +162,8 @@
 
 
 
-    console.log(a > b)
-    console.log(a < b)
+    // console.log(a > b)
+    // console.log(a < b)
 
     // operator logika
     // &&, AND, OR, ||, !: tidak  / not
