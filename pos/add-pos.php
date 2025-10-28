@@ -10,33 +10,57 @@ $queryProducts    = mysqli_query($koneksi, "SELECT c.category_name, p.* FROM pro
 $fetchProducts    = mysqli_fetch_all($queryProducts, MYSQLI_ASSOC);
 
 if (isset($_GET['payment'])) {
+
+  // transaction
+  mysqli_begin_transaction($koneksi);
   $data = json_decode(file_get_contents('php://input'), true);
 
   $cart = $data["cart"];
   $subtotal = array_reduce($cart, function ($sum, $item) {
-      return $sum + ($item['product_price'] * $item['quantity']);
+    return $sum + ($item['product_price'] * $item['quantity']);
   }, 0);
   $tax            = $subtotal * 0.1;
   $orderAmounth   = $subtotal + $tax;
-
   $orderCode      = 'ODR-' . date('YmdHis');
   $orderDate      = date("Y-m-d H:1:s");
   $orderChange    = 0;
   $orderStatus    = 1;
 
-  $insertOrder    = mysqli_query($koneksi, "INSERT INTO orders (order_code, order_date, order_amount, order_change, order_status) VALUES ('$orderCode','$orderDate', '$$orderAmounth', '$orderChange', '$orderStatus' )");
-  $idOrder    = mysqli_insert_id($koneksi);
+  try {
+    $insertOrder    = mysqli_query($koneksi, "INSERT INTO orders (order_code, order_date, order_amount, order_subtotal, order_status) VALUES ('$orderCode','$orderDate', '$orderAmounth', '$subtotal', '$orderStatus')");
 
-  foreach ($cart as $v) {
+    if (!$insertOrder) {
+      throw new Exception("Insert failed to table orders", mysqli_error($koneksi));
+    }
+    $idOrder        = mysqli_insert_id($koneksi);
+
+    foreach ($cart as $v) {
       $product_id   = $v['id'];
       $qty          = $v['quantity'];
       $order_price  = $v['product_price'];
       $subtotal     = $qty * $order_price;
 
-      $insertOrderDetails = mysqli_query($koneksi, "INSERT INTO order_details (order_id, product_id, qty, order_price, order_subtotal) VALUES ('$product_id', '$qty', '$order_price', '$subtotal')");
+      $insertOrderDetails = mysqli_query($koneksi, "INSERT INTO order_details (order_id, product_id, qty, order_price, order_subtotal) VALUES ('$idOrder','$product_id', '$qty', '$order_price', '$subtotal')");
+      if (!$insertOrderDetails) {
+          throw new Exception("Insert failed to table order details", mysqli_error($koneksi));
+      }
+    }
+
+    mysqli_commit($koneksi);
+    $response = [
+      'status' => 'success',
+      'message' => 'Transaction success',
+      'order_id' => $idOrder,
+      'order_code' => $orderCode,
+    ];
+    echo json_encode($response, 201); die;
+  } catch (\Throwable $th) {
+
+    mysqli_rollback($koneksi);
+    $response = ['status' => 'Error', 'message' => $th->getMessage()];
+    echo json_encode($response, 500); die;
+    // print_r($error);
   }
-  header("Location:?page=pos");
-  exit();
 }
 
 ?>

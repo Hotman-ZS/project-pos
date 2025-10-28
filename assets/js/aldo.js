@@ -227,24 +227,36 @@ function updateTotal() {
   // console.log(tax);
   // console.log(total);
 }
-document.getElementById("clearCart").addEventListener("click", 
-  function (e) {                                                                                                             m
-    cart = [];
-    renderCart();
+document.getElementById('clearCart').addEventListener('click', function (e) {
+  cart = [];
+  renderCart();
 });
 
-async function processPayment(params) {
+async function processPayment() {
   if (cart.length === 0) {
-    alert("Cart Masih Kosong");
+    alert('Cart Masih Kosong');
+    return;
   }
+  console.log(cart);
+
   try {
-    const res = await fetch("add-pos.php?payment", {
-      method  : "POST",
-      headers : {"Content-Type" : "application/json"},
-      body    : JSON.stringify({ cart }),
+    const res = await fetch('add-pos.php?payment', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ cart }),
     });
-    
-  } catch (error) {}
+    const data = await res.json();
+    if (data.status == "success") {
+      alert("Transaction success");
+      window.location.href = 'print.php'; 
+    } else {
+      alert("Transaction failed", data.message);
+    }
+    // const data = await res.json();
+  } catch (error) {
+    alert('Ups! Transaction failed!');
+    console.log('error', error);
+  }
 }
 // useEffect(() => {
 // }, [])
